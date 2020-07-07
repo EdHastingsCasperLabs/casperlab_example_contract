@@ -17,6 +17,7 @@ pub enum Error {
     InvalidArgument4 = 26,             // 65562
     InvalidArgument5 = 27,             // 65563
     UnsupportedNumberOfArguments = 28, // 65564
+    PacketSliceError = 100,            // 65636
     TestError = 999,
 }
 

@@ -1,12 +1,12 @@
 use casperlabs_contract::{contract_api::runtime, unwrap_or_revert::UnwrapOrRevert};
-use casperlabs_types::{account::PublicKey, bytesrepr::FromBytes, CLTyped, ContractRef, U512};
+use casperlabs_types::{bytesrepr::FromBytes, CLTyped};
 
 use crate::error::Error;
 
 pub const RELAY_AND_VERIFY: &str = "relay_and_verify";
 
 pub enum Api {
-    RELAY_AND_VERIFY(Vec<u8>),
+    RelayAndVerify(Vec<u8>),
 }
 
 fn get_arg<T: CLTyped + FromBytes>(i: u32) -> T {
@@ -21,7 +21,7 @@ impl Api {
         match method_name.as_str() {
             RELAY_AND_VERIFY => {
                 let proof: Vec<u8> = get_arg(1);
-                Api::RELAY_AND_VERIFY(proof)
+                Api::RelayAndVerify(proof)
             }
             _ => runtime::revert(Error::UnknownApiCommand),
         }

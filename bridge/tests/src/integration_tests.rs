@@ -1,4 +1,3 @@
-use hex;
 use obi::*;
 use tiny_keccak::{Hasher, Keccak};
 
@@ -80,17 +79,10 @@ mod tests {
         let key = hex::encode(&mock_packet.req.get_hash());
         let value = hex::decode("0000000966726f6e745f656e6400000000000000010000000f00000003425443000000003b9aca0000000000000000040000000000000002").unwrap();
 
-        println!("{:?}", mock_packet.req.get_hash());
-        println!("{:?}", hex::encode(mock_packet.req.try_to_vec().unwrap()));
+        println!("________________ test setup ________________");
+        println!("mock_packet hash: {:?}", mock_packet.req.get_hash());
+        println!("mock_packet: {:?}", hex::encode(mock_packet.req.try_to_vec().unwrap()));
 
-        // assert_eq!(
-        //     hex::encode(&mock_packet.req.get_hash()),
-        //     String::from("0xaa")
-        // );
-
-        // The test framework checks for compiled Wasm files in '<current working dir>/wasm'.  Paths
-        // relative to the current working dir (e.g. 'wasm/contract.wasm') can also be used, as can
-        // absolute paths.
         let session_code = Code::from("contract.wasm");
         let session_args = ("relay_and_verify", value.clone());
         let session = SessionBuilder::new(session_code, session_args)
@@ -98,7 +90,10 @@ mod tests {
             .with_authorization_keys(&[MY_ACCOUNT])
             .build();
 
-        let result_of_query: Result<Value, Error> = context.run(session).query(MY_ACCOUNT, &[&key]);
+        println!("_____________ executing contract ___________");
+        let context = context.run(session);
+
+        let result_of_query: Result<Value, Error> = context.query(MY_ACCOUNT, &[&key]);
 
         let returned_value = result_of_query.expect("should be a value");
 
